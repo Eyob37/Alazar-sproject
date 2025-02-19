@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>add the elements </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+                
+        body {
+            background: #aaf4ffba;
+            display: flex;
+            align-items: center;
+            align-content: center;
+            justify-content: center;
+            vertical-align: center;
+            flex-direction: column;
+            
+        }
+        select{
+           width: 125px; 
+        }
+        textarea{
+            width: 250px;
+            height: 150px;
+        } 
+        #risk-to-reward{
+            display: flex;
+            font-weight: 900;
+        }
+        #risk-to-reward input{
+            width: 100px;
+            margin: 0 5px;
+            text-align: center;
+        }
+        #risk-to-reward input:hover{
+            background: cyan;
+        }
+        #risk-reward-ratio{
+            display: flex;
+            font-weight: 900;
+        }
+        #risk-reward-ratio input{
+            width: 100px;
+            margin: 0 5px;
+            text-align: center;
+        }
+        #risk-reward-ratio input:hover{
+            background: cyan;
+        }
+        button{
+            position: absolute;
+            right: 10px;
+            bottom: 10px;
+            background: yellow;   
+            height: 40px;
+            width: 100px;
+            border-radius: 20px;
+            color: red;
+            font-weight: bolder;
+            font-size: 130%;
+        }
+    </style>
+</head>
+<body>
+    <h3>Enter the trade(win, lose)</h3><select>
+        <option value="win">Win</option>
+        <option value="lose">lose</option>
+    </select>
+    <h3>Enter the Reason(why you're loose or win?)</h3><textarea></textarea>    
+    <h3>Enter the Picture (optional)</h3>
+    <input type="file" id="picture" accept="image/*">
+    <br><br>
+    <img id="preview" src="#" alt="Image Preview" style="display: none; max-width: 300px;">
+    <h3>Enter the risk to reward (risk, reward)</h3>
+    <div id="risk-to-reward">
+    <input type="text" id="Risk">:<input type="text" id ="reward">
+    </div>
+    <h3>Enter the risk reward ratio (risk, reward)</h3>
+    <div id="risk-reward-ratio">
+    <input type="text" id="Risk">:<input type="text" id ="reward">
+    </div>
+    <button onclick="done()">Done</button>
+    <script>        
+        const fileInput = document.getElementById('picture');
+        const preview = document.getElementById('preview');        
+        
+        fileInput.addEventListener('change', function(event) {
+            const file = event.target.files[0]; 
+            if (file) {
+                const reader = new FileReader();                 
+                reader.onload = function(e) {                    
+                    preview.src = e.target.result;
+                    preview.style.display = 'block'; 
+                };
+                
+                reader.readAsDataURL(file);
+            } else {
+                preview.style.display = 'none';
+            }
+        });
+        
+       
+    function done() {
+        const fileInput = document.getElementById('picture');
+        const reason = document.querySelector("textarea").value;
+        const trade = document.querySelector("select").value;
+        const riskToReward = {
+            risk: document.querySelector("#risk-to-reward #Risk").value,
+            reward: document.querySelector("#risk-to-reward #reward").value
+        };
+        const riskRewardRatio = {
+            risk: document.querySelector("#risk-reward-ratio #Risk").value,
+            reward: document.querySelector("#risk-reward-ratio #reward").value
+        };
+
+        // Handling file input
+        const file = fileInput.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const fileData = e.target.result; // Base64 encoded file
+                sessionStorage.setItem('file', fileData);
+                sessionStorage.setItem('reason', reason);
+                sessionStorage.setItem('trade', trade);
+                sessionStorage.setItem('riskToReward', JSON.stringify(riskToReward));
+                sessionStorage.setItem('riskRewardRatio', JSON.stringify(riskRewardRatio));
+
+                // Redirect to menu.html
+                window.location.href = "index.html";
+            };
+            reader.readAsDataURL(file);
+        } else {
+            sessionStorage.setItem('file', '');
+            sessionStorage.setItem('reason', reason);
+            sessionStorage.setItem('trade', trade);
+            sessionStorage.setItem('riskToReward', JSON.stringify(riskToReward));
+            sessionStorage.setItem('riskRewardRatio', JSON.stringify(riskRewardRatio));
+
+            // Redirect to menu.html
+            window.location.href = "index.html";
+        }
+    }
+    </script>       
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Trader Notebook</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            background: orange;            
+        }
+        h1 {
+            color: blue;
+            text-align: center;
+        }
+        table {            
+            border-collapse: collapse;
+            width: 95%;
+            text-align: center;
+            margin: 50px auto;   
+            background: #afafaf;   
+            box-shadow: 10px 10px 10px gold;      
+        }        
+        table, th, tr, td {            
+            font-size: 12px;
+            padding: 5px;
+            border: 1px solid black;
+        }
+        th {
+            width: 16.66%;
+        }
+        button {
+            color: red;
+            position: absolute;
+            right: 5px;
+            bottom: 5px;
+            width: 50px;
+            height: 50px;
+            font-size: 45px;
+            border-radius: 50%;
+            font-weight: 600;
+            background: cyan;
+        }
+        img {
+            width: 100%;
+            height: auto;
+        }
+        @media only screen and (min-width:768px){                            
+            th, tr, td {            
+                height: 50px;
+            }
+          .image{
+                width: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Note Books for Traders</h1>
+    <table id="dataTable">
+        <tr>
+            <th>Trade</th>
+            <th>Reason</th>          
+            <th>Picture</th>
+            <th>Risk to Reward</th>
+            <th>Risk Reward Ratio</th>
+        </tr>
+    </table>
+    <button onclick="add()">+</button>
+
+    <script>
+        const table = document.getElementById('dataTable');
+        // Load table data from localStorage
+        function loadTable() {
+            const savedTable = localStorage.getItem('table');
+            if (savedTable) {
+                table.innerHTML = savedTable;
+            }
+        }
+
+        // Save table data to localStorage
+        function saveTable() {
+            localStorage.setItem('table', table.innerHTML);
+        }
+
+        window.onload = function() {
+            loadTable();
+
+            const fileData = sessionStorage.getItem('file');
+            const reason = sessionStorage.getItem('reason');
+            const trade = sessionStorage.getItem('trade');
+            const riskToReward = JSON.parse(sessionStorage.getItem('riskToReward'));
+            const riskRewardRatio = JSON.parse(sessionStorage.getItem('riskRewardRatio'));
+
+            if (trade && reason && riskToReward && riskRewardRatio) {
+                const newRow = table.insertRow();
+                
+                newRow.insertCell(0).innerText = trade;
+                newRow.insertCell(1).innerText = reason;
+                
+                // Add image if available
+                const imgCell = newRow.insertCell(2);
+                if (fileData) {
+                    const img = document.createElement("img");
+                    img.src = fileData;
+                    imgCell.appendChild(img);
+                    img.classList.add("image");
+                } else {
+                    imgCell.innerText = "No Image";
+                }
+
+                newRow.insertCell(3).innerText = `${riskToReward.risk} : ${riskToReward.reward}`;
+                newRow.insertCell(4).innerText = `${riskRewardRatio.risk} : ${riskRewardRatio.reward}`;
+
+                // Save table and clear sessionStorage
+                saveTable();
+                sessionStorage.clear();
+            }
+        };
+
+        function add() {
+            window.location.href = "Next.html";
+        }
+    </script>
+</body>
+</html>
