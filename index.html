@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Trader Notebook</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
             background: orange;            
@@ -18,40 +17,52 @@
             text-align: center;
             margin: 50px auto;   
             background: #afafaf;   
-            box-shadow: 10px 10px 10px gold;      
+            box-shadow: 10px 10px 10px gold;    
+            table-layout: fixed;  
         }        
         table, th, tr, td {            
             font-size: 12px;
             padding: 5px;
             border: 1px solid black;
+        }                        
+
+        th:nth-child(2), td:nth-child(2), 
+        th:nth-child(3), td:nth-child(3) {
+            width: 30%;
         }
-        th {
-            width: 16.66%;
+
+        th:nth-child(1), td:nth-child(1),
+        th:nth-child(4), td:nth-child(4),
+        th:nth-child(5), td:nth-child(5),
+        th:nth-child(6), td:nth-child(6) {
+            width: 10%;
         }
         button {
             color: red;
-            position: absolute;
-            right: 5px;
-            bottom: 5px;
-            width: 50px;
-            height: 50px;
-            font-size: 45px;
-            border-radius: 50%;
+            width: 80%;
+            height: auto;            
+            font-size: 90%;
             font-weight: 600;
             background: cyan;
+            border: none;
+            cursor: pointer;
         }
+        #add {  
+            color: red;  
+            position: fixed;  
+            right: 1%;  
+            bottom: 1%;  
+            width: 50px;  
+            height: 50px;  
+            font-size: 45px;  
+            border-radius: 50%;  
+            font-weight: 600;  
+            background: cyan;  
+        }  
         img {
-            width: 100%;
+            max-width: 100%;
             height: auto;
-        }
-        @media only screen and (min-width:768px){                            
-            th, tr, td {            
-                height: 50px;
-            }
-          .image{
-                width: 100px;
-            }
-        }
+        }        
     </style>
 </head>
 <body>
@@ -63,56 +74,84 @@
             <th>Picture</th>
             <th>Risk to Reward</th>
             <th>Risk Reward Ratio</th>
+            <th>Action</th>
         </tr>
     </table>
-    <button onclick="add()">+</button>
+    <button id="add" onclick="add()">+</button>
 
     <script>
-        const table = document.getElementById('dataTable');
-        // Load table data from localStorage
+        const table = document.getElementById('dataTable');        
+
         function loadTable() {
-            const savedTable = localStorage.getItem('table');
-            if (savedTable) {
-                table.innerHTML = savedTable;
-            }
+            const savedData = JSON.parse(localStorage.getItem('tableData')) || [];
+            savedData.forEach(data => insertRow(data));
         }
 
-        // Save table data to localStorage
         function saveTable() {
-            localStorage.setItem('table', table.innerHTML);
+            const rows = Array.from(table.rows).slice(1);
+            const tableData = rows.map(row => ({
+                id: row.id,
+                trade: row.cells[0].innerText,
+                reason: row.cells[1].innerText,
+                fileData: row.cells[2].querySelector("img")?.src || '',
+                riskToReward: row.cells[3].innerText,
+                riskRewardRatio: row.cells[4].innerText
+            }));
+            localStorage.setItem('tableData', JSON.stringify(tableData));
+        }
+
+        function insertRow(data) {
+            const newRow = table.insertRow();
+            newRow.id = data.id || `row-${Date.now()}`;
+            newRow.insertCell(0).innerText = data.trade;
+            newRow.insertCell(1).innerText = data.reason;
+
+            const imgCell = newRow.insertCell(2);
+            if (data.fileData) {
+                const img = document.createElement("img");
+                img.src = data.fileData;
+                imgCell.appendChild(img);
+            } else {
+                imgCell.innerText = "No Image";
+            }
+            
+            newRow.insertCell(3).innerText = data.riskToReward;
+            newRow.insertCell(4).innerText = data.riskRewardRatio;
+
+            const actionCell = newRow.insertCell(5);
+            const deleteButton = document.createElement("button");
+            deleteButton.innerText = "X";
+            deleteButton.onclick = function() { removeRow(newRow.id); };
+            actionCell.appendChild(deleteButton);
+
+            saveTable();
+        }
+
+        function removeRow(rowId) {
+            const row = document.getElementById(rowId);
+            if (row) {
+                row.remove();
+                saveTable();
+            }
         }
 
         window.onload = function() {
             loadTable();
-
-            const fileData = sessionStorage.getItem('file');
-            const reason = sessionStorage.getItem('reason');
             const trade = sessionStorage.getItem('trade');
+            const reason = sessionStorage.getItem('reason');
+            const fileData = sessionStorage.getItem('file');
             const riskToReward = JSON.parse(sessionStorage.getItem('riskToReward'));
             const riskRewardRatio = JSON.parse(sessionStorage.getItem('riskRewardRatio'));
 
             if (trade && reason && riskToReward && riskRewardRatio) {
-                const newRow = table.insertRow();
-                
-                newRow.insertCell(0).innerText = trade;
-                newRow.insertCell(1).innerText = reason;
-                
-                // Add image if available
-                const imgCell = newRow.insertCell(2);
-                if (fileData) {
-                    const img = document.createElement("img");
-                    img.src = fileData;
-                    imgCell.appendChild(img);
-                    img.classList.add("image");
-                } else {
-                    imgCell.innerText = "No Image";
-                }
-
-                newRow.insertCell(3).innerText = `${riskToReward.risk} : ${riskToReward.reward}`;
-                newRow.insertCell(4).innerText = `${riskRewardRatio.risk} : ${riskRewardRatio.reward}`;
-
-                // Save table and clear sessionStorage
-                saveTable();
+                insertRow({
+                    id: `row-${Date.now()}`,
+                    trade,
+                    reason,
+                    fileData,
+                    riskToReward: `${riskToReward.risk} : ${riskToReward.reward}`,
+                    riskRewardRatio: `${riskRewardRatio.risk} : ${riskRewardRatio.reward}`
+                });
                 sessionStorage.clear();
             }
         };
