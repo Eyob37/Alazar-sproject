@@ -121,3 +121,6 @@ img {
 label{
     font-weight: bolder;
 }
+#save{
+    width: 50px;
+}
