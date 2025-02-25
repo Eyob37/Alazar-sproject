@@ -1,0 +1,55 @@
+<!-- HTML code-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Trader Notebook</title>
+    <link rel="stylesheet" href="style.css">        
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>    
+    <div style="height: 40px;" id="menu">
+    <input onclick="controlWidth()" id="checkbox" type="checkbox">
+    <label class="toggle" for="checkbox">
+        <div id="bar1" class="bars"></div>
+        <div id="bar2" class="bars"></div>
+        <div id="bar3" class="bars"></div>
+    </label>
+    <div id="settings">
+        <label for="table-background-picker">Enter the table background color</label>        
+    <input onchange="changeBackground('table')" id="table-background-picker" type="color"><br><br>
+    <label for="body-background-picker">Enter the Body background color</label>        
+    <input onchange="changeBackground('body')" id="body-background-picker" type="color"><br><br>
+    <label for="table-shadow-picker">Enter the Table shadow color</label>        
+    <input onchange="changeBackground('ts')" id="table-shadow-picker" type="color"><br><br>
+    <label for="menu-background-picker">Enter the menu background color</label>        
+    <input onchange="changeBackground('menuB')" id="menu-background-picker" type="color"><br><br>
+    <label for="menu-color-picker">Enter the menu color</label>        
+    <input onchange="changeBackground('menuC')" id="menu-color-picker" type="color"><br><br>
+    <label onclick="goToRecycleBin()">Recycle bin</label><br><br>
+    <label for="save">Save to File</label>
+    <button id="save" onclick="saveToFile()">Save</button><br><br>
+    <label for="fileInput">Upload from file</label>
+<input type="file" id="fileInput" accept=".json">
+    </div>
+    </div>
+    <h2>Note Books for Traders</h2>
+    <table id="dataTable">
+        <tr>
+            <th>Trade</th>
+            <th>Reason</th>
+            <th>Emotion</th> 
+            <th>Picture</th>
+            <th>Risk to Reward</th>
+            <th>Risk Reward Ratio</th>
+            <th>Action</th>
+        </tr>
+    </table>
+    <p id="writer"></p>
+    <button id="add" onclick="add()">+</button>
+        
+    <script src="script.js">
+     
+    </script>            
+</body>
+</html>
