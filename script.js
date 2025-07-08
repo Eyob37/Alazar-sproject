@@ -1,4 +1,5 @@
 /* script code */
+localStorage.setItem("Backgrounds", null);
 const table = document.getElementById('dataTable');        
 const LBackgrounds = localStorage.getItem("Backgrounds");
 let menu = document.getElementById("menu");
