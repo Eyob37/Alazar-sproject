@@ -26,6 +26,19 @@ function saveToFile() {
     document.body.removeChild(a);
 }
 
+function downloadImage(event) {
+    const image = event.currentTarget;
+    const imageSrc = image.src;
+    const link = document.createElement('a');
+    link.href = imageSrc;
+    // Extract a filename from the URL or use a generic one
+    const filename = imageSrc.split('/').pop() || 'downloaded_image.jpg';
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
 function uploadFromFile(event) {
     const file = event.target.files[0];
     const reader = new FileReader();
