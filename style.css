@@ -84,7 +84,7 @@ h2 {
 /* Settings Panel */
 #settings {
     margin-top: 40px;
-    color: var(--menu-text-color, #fff);
+    color: var(--menu-text-color, red);
     padding: 10px;
     opacity: 0;
     transition: opacity 0.3s ease;
