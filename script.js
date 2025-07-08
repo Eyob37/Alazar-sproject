@@ -187,7 +187,7 @@ document.documentElement.style.setProperty('--menu-background', color);
     }else if (changeValue == "menuC"){
         const color = menuColorPicker.value
         for(let i = 0; i < menu.children.length; i++){
- menu.children[i].style.setProperty('--menu-background', color);
+ menu.children[i].style.setProperty('--menu-text-color', color);
         }
     }    
     saveBackgrounds();
