@@ -26,13 +26,11 @@ function saveToFile() {
     document.body.removeChild(a);
 }
 
-function downloadImage(event) {
-    const image = event.currentTarget;
-    const imageSrc = image.src;
+function downloadImage(imageSrc) {
     const link = document.createElement('a');
     link.href = imageSrc;
-    // Extract a filename from the URL or use a generic one
-    const filename = imageSrc.split('/').pop() || 'downloaded_image.jpg';
+    // Create a filename - you can customize this
+    const filename = "trade_image_" + new Date().toISOString().slice(0, 10) + ".jpg";
     link.download = filename;
     document.body.appendChild(link);
     link.click();
@@ -128,6 +126,12 @@ function insertRow(data) {
     if (data.fileData) {
         const img = document.createElement("img");
         img.src = data.fileData;
+        // Make image clickable for download
+        img.style.cursor = "pointer";
+        img.title = "Click to download"; // Tooltip
+        img.onclick = function() {
+            downloadImage(this.src);
+        };
         imgCell.appendChild(img);
     } else {
         imgCell.innerText = "No Image";
