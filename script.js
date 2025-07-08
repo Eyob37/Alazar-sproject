@@ -181,13 +181,10 @@ function changeBackground(changeValue) {
     }else if (changeValue == "ts"){
         table.style.boxShadow = "10px 10px 10px" + tableShadowColorPicker.value;
     }else if (changeValue == "menuB") {
-        const color = menuBackgroundColorPicker.value;
-document.documentElement.style.setProperty('--menu-background', color);
-
-    }else if (changeValue == "menuC"){
-        const color = menuColorPicker.value
+        menu.style.background = menuBackgroundColorPicker.value;
+    }else if (changeValue == "menuC"){        
         for(let i = 0; i < menu.children.length; i++){
- menu.children[i].style.setProperty('--menu-text-color', color);
+            menu.children[i].style.color = menuColorPicker.value;
         }
     }    
     saveBackgrounds();
